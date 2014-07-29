@@ -56,8 +56,8 @@
                     <h3 class="masthead-brand">Mikasa</h3>
                     <ul class="nav masthead-nav">
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">GitHub</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="https://github.com/XadillaX/mikasa">GitHub</a></li>
+                        <li><a href="http://xcoder.in/">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -91,6 +91,7 @@
 <script src="/codemirror/keymap/vim.js"></script>
 <script src="/store+json2.min.js"></script>
 <script src="/vex/js/vex.combined.min.js"></script>
+<script src="/jquery.backstretch.min.js"></script>
 <script>vex.defaultOptions.className = 'vex-theme-os';</script>
 <script>
 window.alert = vex.dialog.alert;
@@ -123,6 +124,8 @@ function sendToKafka() {
 }
 
 $(function() {
+    $.backstretch("/mikasa.jpg");
+
     $("#topic").val(store.get("mikasa$topic"));
     $("#message").val(store.get("mikasa$message"));
 
