@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A kafka sender for testing">
+    <meta name="author" content="XadillaX">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Misaka - A kafka sender for testing</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/cover.css" rel="stylesheet">
+
+    <!-- Code Mirror -->
+    <link rel="stylesheet" href="/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/codemirror/theme/monokai.css">
+
+    <!-- Google Font -->
+    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+    <!-- Vex -->
+    <link rel="stylesheet" href="/vex/css/vex.css" />
+    <link rel="stylesheet" href="/vex/css/vex-theme-os.css" />
+
+    <style>
+    #topic {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .CodeMirror {
+        text-align: left;
+        font-size: 14px;
+        font-family: "Fantasque Sans Mono";
+
+        border: 1px solid #111;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+    </style>
+</head>
+
+<body>
+<div class="site-wrapper">
+    <div class="site-wrapper-inner">
+        <div class="cover-container">
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <h3 class="masthead-brand">Mikasa</h3>
+                    <ul class="nav masthead-nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="inner cover">
+                <h1 class="cover-heading">Send a message to Kafka</h1>
+                <p>
+                    <input id="topic" type="text" class="form-control" placeholder="Topic">
+                </p>
+                <p class="lead">
+                    <textarea class="form-control" style="text-align: center;" id="message" rows="5"></textarea>
+                </p>
+                <p class="lead">
+                    <a id="send" href="#" data-loading-text="Sending..." class="btn btn-lg btn-default">Send</a>
+                </p>
+            </div>
+
+            <div class="mastfoot">
+                <div class="inner">
+                    <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/jquery-2.1.1.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/codemirror/lib/codemirror.js"></script>
+<script src="/codemirror/mode/javascript/javascript.js"></script>
+<script src="/codemirror/keymap/vim.js"></script>
+<script src="/store+json2.min.js"></script>
+<script src="/vex/js/vex.combined.min.js"></script>
+<script>vex.defaultOptions.className = 'vex-theme-os';</script>
+<script>
+window.alert = vex.dialog.alert;
+var codeMirror = null;
+function sendToKafka() {
+    var topic = $("#topic").val().trim();
+    var message = codeMirror.getValue().trim();
+
+    if("" === topic || "" === message) {
+        return alert("Please fill the blanks.");
+    }
+
+    $("#send").button("loading");
+
+    store.set("mikasa$topic", topic);
+    store.set("mikasa$message", message);
+
+    $.post("/send", {
+        topic       : topic,
+        message     : message
+    }, function(e) {
+        $("#send").button("reset");
+
+        if(!e.status) {
+            return alert(e.message);
+        }
+
+        alert("Message sent successfully with offset " + e.data[topic]["0"] + ".");
+    });
+}
+
+$(function() {
+    $("#topic").val(store.get("mikasa$topic"));
+    $("#message").val(store.get("mikasa$message"));
+
+    codeMirror = CodeMirror.fromTextArea(document.getElementById("message"), {
+        theme           : "monokai",
+        //keyMap          : "vim",
+        lineWrapping    : true,
+        lineNumbers     : true,
+        mode            : "application/ld+json"
+    });
+
+    $("#send").click(function() {
+        sendToKafka();
+    });
+});
+</script>
+</body>
+</html>
