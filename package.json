@@ -1,7 +1,7 @@
 {
-  "name": "exframess",
-  "version": "0.0.2",
-  "description": "A framework for expressjs.",
+  "name": "mikasa",
+  "version": "0.0.1",
+  "description": "A kafka sender for testing.",
   "main": "app.js",
   "dependencies": {
     "async": "~0.8.0",

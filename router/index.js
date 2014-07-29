@@ -9,6 +9,5 @@ exports.post = {
 };
 
 exports.get = {
-    "/"         : indexController.index,
-    "/send"     : indexController.send
+    "/"         : indexController.index
 };
