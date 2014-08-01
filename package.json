@@ -12,7 +12,7 @@
     "sugar": "~1.4.1",
     "connect-mongo": "~0.4.1",
     "ejs": "~1.0.0",
-    "kafka": "~0.2.3"
+    "kafka-node": "~0.2.3"
   },
   "devDependencies": {},
   "author": "XadillaX",
