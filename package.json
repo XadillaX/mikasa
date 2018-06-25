@@ -5,7 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "async": "~0.8.0",
-    "express": "~3.6.0",
+    "express": "~4.16.0",
     "walk": "~2.3.1",
     "mongoose": "~3.8.9",
     "log4js": "~0.6.14",
